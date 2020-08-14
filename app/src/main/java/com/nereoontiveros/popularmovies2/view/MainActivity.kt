@@ -5,30 +5,61 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.nereoontiveros.popularmovies2.R
 import com.nereoontiveros.popularmovies2.model.Movie
 import com.nereoontiveros.popularmovies2.utils.MoviesRepository
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var popularMovies: RecyclerView
+    /*private lateinit var popularMovies: RecyclerView
     private lateinit var popularMoviesAdapter: MoviesAdapter
     private lateinit var popularMoviesLayoutMgr: LinearLayoutManager
-
     private var popularMoviesPage = 1
 
     private lateinit var topRatedMovies: RecyclerView
     private lateinit var topRatedMoviesAdapter: MoviesAdapter
     private lateinit var topRatedMoviesLayoutMgr: LinearLayoutManager
+    private var topRatedMoviesPage = 1*/
 
-    private var topRatedMoviesPage = 1
+    lateinit var popularMoviesFragment: PopularMoviesFragment
+    lateinit var topRatedMoviesFragment: TopRatedMoviesFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val bottomNavigation : BottomNavigationView = findViewById(R.id.bottom_nav)
+
+        showDefaultFragment()
+
+        bottomNavigation.setOnNavigationItemSelectedListener { item ->
+            when(item.itemId){
+                R.id.popular->{
+                    popularMoviesFragment = PopularMoviesFragment()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout,popularMoviesFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit()
+                }
+                R.id.topRated->{
+                    topRatedMoviesFragment = TopRatedMoviesFragment()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout,topRatedMoviesFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit()
+
+                }
+            }
+            true
+        }
+
+
+        /*
+        //============ Popular =====================//
         popularMovies = findViewById(R.id.popular_movies)
         popularMoviesLayoutMgr = LinearLayoutManager(
             this,
@@ -39,6 +70,9 @@ class MainActivity : AppCompatActivity() {
         popularMoviesAdapter = MoviesAdapter(mutableListOf()){ movie -> showMovieDetails(movie) }
         popularMovies.adapter = popularMoviesAdapter
 
+
+
+        //============ Top rated =====================//
         topRatedMovies = findViewById(R.id.top_rated_movies)
         topRatedMoviesLayoutMgr = LinearLayoutManager(
             this,
@@ -49,16 +83,21 @@ class MainActivity : AppCompatActivity() {
         topRatedMoviesAdapter = MoviesAdapter(mutableListOf()){ movie -> showMovieDetails(movie) }
         topRatedMovies.adapter = topRatedMoviesAdapter
 
+
+        //=============================================//
         getPopularMovies()
         getTopRatedMovies()
+        */
 
+    }
+    /*
+    private fun getPopularMovies() {
         MoviesRepository.getPopularMovies(
             popularMoviesPage,
-             ::onPopularMoviesFetched,
-             ::onError
+            ::onPopularMoviesFetched,
+            ::onError
         )
     }
-
     private fun getTopRatedMovies() {
         MoviesRepository.getTopRatedMovies(
             topRatedMoviesPage,
@@ -66,6 +105,7 @@ class MainActivity : AppCompatActivity() {
             ::onError
         )
     }
+
     private fun attachTopRatedMoviesOnScrollListener() {
         topRatedMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -80,22 +120,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
-    }
-    private fun onTopRatedMoviesFetched(movies: List<Movie>) {
-        topRatedMoviesAdapter.appendMovies(movies)
-        attachTopRatedMoviesOnScrollListener()
-    }
-
-    private fun onPopularMoviesFetched(movies: List<Movie>) {
-        popularMoviesAdapter.appendMovies(movies)
-        attachPopularMoviesOnScrollListener()
-    }
-    private fun getPopularMovies() {
-        MoviesRepository.getPopularMovies(
-            popularMoviesPage,
-            ::onPopularMoviesFetched,
-            ::onError
-        )
     }
     private fun attachPopularMoviesOnScrollListener() {
         popularMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -117,10 +141,18 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    private fun onTopRatedMoviesFetched(movies: List<Movie>) {
+        topRatedMoviesAdapter.appendMovies(movies)
+        attachTopRatedMoviesOnScrollListener()
+    }
+    private fun onPopularMoviesFetched(movies: List<Movie>) {
+        popularMoviesAdapter.appendMovies(movies)
+        attachPopularMoviesOnScrollListener()
+    }
+
     private fun onError(){
         Toast.makeText(this, getString(R.string.error_fetch_movies), Toast.LENGTH_SHORT).show()
     }
-
 
     private fun showMovieDetails(movie: Movie) {
         val intent = Intent(this, MovieDetailsActivity::class.java)
@@ -131,5 +163,13 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(MOVIE_RELEASE_DATE, movie.releaseDate)
         intent.putExtra(MOVIE_OVERVIEW, movie.overview)
         startActivity(intent)
+    }*/
+
+    private fun showDefaultFragment(){
+        popularMoviesFragment = PopularMoviesFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout,popularMoviesFragment)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .commit()
     }
 }
