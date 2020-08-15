@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nereoontiveros.popularmovies2.R
@@ -37,14 +38,11 @@ class PopularMoviesFragment : Fragment() {
         val rootView = inflater.inflate(R.layout.fragment_popular_movies, container, false)
 
         popularMovies = rootView.findViewById(R.id.popular_movies)
-        popularMoviesLayoutMgr = LinearLayoutManager(
-            context!!,
-            LinearLayoutManager.VERTICAL,
-            false
-        )
+        popularMoviesLayoutMgr = GridLayoutManager(context,2)
         popularMovies.layoutManager = popularMoviesLayoutMgr
         popularMoviesAdapter = MoviesAdapter(mutableListOf()){ movie -> showMovieDetails(movie) }
         popularMovies.adapter = popularMoviesAdapter
+
 
         getPopularMovies()
 
